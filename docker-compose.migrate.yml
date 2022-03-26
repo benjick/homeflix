@@ -1,8 +1,7 @@
 version: "2.4"
 services:
   configure:
-    build: app
-    profiles: [ "one-time" ]
+    build: config/migrate
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - ./config:/config
