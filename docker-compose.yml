@@ -121,10 +121,11 @@ services:
     restart: unless-stopped
 
   caddy:
-    image: caddy
+    build: config/caddy
     container_name: caddy
     ports:
-      - 8000:80
+      - 80:80
+      - 443:443
     volumes:
       - ./config/caddy/Caddyfile:/etc/caddy/Caddyfile
       - ./config/caddy/site:/srv
@@ -133,6 +134,13 @@ services:
     env_file:
       - docker-compose.env
     restart: unless-stopped
+
+  app:
+    build: app
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    expose:
+     - 3000
 
 volumes:
   caddy_data:
