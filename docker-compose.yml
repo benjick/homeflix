@@ -65,8 +65,6 @@ services:
       - /mnt/f/Warez:/warez/f
       - /mnt/g/Warez:/warez/g
       - /mnt/e/Warez/Usenet:/downloads
-    ports:
-      - 8988:8989
     expose:
       - 8989
     restart: unless-stopped
@@ -83,8 +81,6 @@ services:
       - /mnt/e/Warez:/warez/e
       - /mnt/g/Warez:/warez/g
       - /mnt/e/Warez/Usenet:/downloads
-    # ports:
-    #   - 7878:7878
     expose:
       - 7878
     restart: unless-stopped
@@ -140,7 +136,8 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
     expose:
-     - 3000
+      - 3000
+    restart: unless-stopped
 
 volumes:
   caddy_data:
