@@ -1,0 +1,21 @@
+{
+  "name": "app",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "@types/node": "^17.0.21",
+    "dockerode": "^3.3.1",
+    "fast-xml-parser": "^4.0.7",
+    "node-fetch": "2",
+    "sqlite": "^4.0.25",
+    "sqlite3": "^5.0.2",
+    "ts-dotenv": "^0.8.3",
+    "ts-node": "^10.7.0",
+    "typescript": "^4.6.2"
+  },
+  "devDependencies": {
+    "@types/dockerode": "^3.3.5",
+    "@types/node-fetch": "^2.6.1"
+  }
+}

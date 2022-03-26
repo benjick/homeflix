@@ -1,0 +1,140 @@
+version: "2.4"
+services:
+  plex:
+    image: linuxserver/plex
+    container_name: plex
+    volumes:
+      - ./config/plex:/config
+      - /mnt/e/Warez:/warez/e
+      - /mnt/f/Warez:/warez/f
+      - /mnt/g/Warez:/warez/g
+    ports:
+      - 1900:1900
+      - 3005:3005
+      - 5353:5353
+      - 8324:8324
+      - 32400:32400
+      - 32410:32410
+      - 32412-32414:32412-32414
+      - 32469:32469
+    expose:
+      - 32400
+    environment:
+      # - PLEX_CLAIM=claim-xxx # See https://www.plex.tv/claim/
+      - VERSION=docker
+      - NVIDIA_VISIBLE_DEVICES=all
+      - NVIDIA_DRIVER_CAPABILITIES=all
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Stockholm
+    restart: unless-stopped
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - capabilities:
+                - gpu
+
+  sabnzbd:
+    image: linuxserver/sabnzbd
+    container_name: sabnzbd
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Stockholm
+      - HAS_IPV6=false
+    volumes:
+      - ./config/sabnzbd:/config
+      - /mnt/e/Warez/Usenet:/downloads
+    ports:
+      - 8081:8080
+    expose:
+      - 8080
+    restart: unless-stopped
+
+  sonarr:
+    image: linuxserver/sonarr
+    container_name: sonarr
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Stockholm
+    volumes:
+      - ./config/sonarr:/config
+      - /mnt/e/Warez:/warez/e
+      - /mnt/f/Warez:/warez/f
+      - /mnt/g/Warez:/warez/g
+      - /mnt/e/Warez/Usenet:/downloads
+    ports:
+      - 8988:8989
+    expose:
+      - 8989
+    restart: unless-stopped
+
+  radarr:
+    image: linuxserver/radarr
+    container_name: radarr
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Stockholm
+    volumes:
+      - ./config/radarr:/config
+      - /mnt/e/Warez:/warez/e
+      - /mnt/g/Warez:/warez/g
+      - /mnt/e/Warez/Usenet:/downloads
+    # ports:
+    #   - 7878:7878
+    expose:
+      - 7878
+    restart: unless-stopped
+
+  tautulli:
+    image: linuxserver/tautulli
+    container_name: tautulli
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Stockholm
+    volumes:
+      - ./config/tautulli:/config
+    ports:
+      - 8181:8181
+    expose:
+      - 8181
+    restart: unless-stopped
+
+  nzbhydra2:
+    image: linuxserver/nzbhydra2
+    container_name: nzbhydra2
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Stockholm
+    volumes:
+      - ./config/nzbhydra2:/config
+      - /mnt/e/Warez/Usenet/nzb:/downloads
+    ports:
+      - 5076:5076
+    expose:
+      - 5076
+    restart: unless-stopped
+
+  caddy:
+    image: caddy
+    container_name: caddy
+    ports:
+      - 8000:80
+    volumes:
+      - ./config/caddy/Caddyfile:/etc/caddy/Caddyfile
+      - ./config/caddy/site:/srv
+      - caddy_data:/data
+      - caddy_config:/config
+    env_file:
+      - docker-compose.env
+    restart: unless-stopped
+
+volumes:
+  caddy_data:
+    external: true
+  caddy_config:

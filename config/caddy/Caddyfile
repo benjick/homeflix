@@ -1,0 +1,30 @@
+:80 {
+	log
+
+	basicauth /* {
+		{$CADDY_BASIC_AUTH_USERNAME} {$CADDY_BASIC_AUTH_PASSWORD}
+	}
+
+	handle /sabnzbd/* {
+		reverse_proxy sabnzbd:8080
+	}
+	handle /sonarr/* {
+		reverse_proxy sonarr:8989
+	}
+	handle /radarr/* {
+		reverse_proxy radarr:7878
+	}
+	handle /nzbhydra2/* {
+		reverse_proxy nzbhydra2:5076
+	}
+	handle /tautulli/* {
+		reverse_proxy sonarr:8181
+	}
+
+	handle {
+		root * /srv
+		file_server {
+			index index.html
+		}
+	}
+}

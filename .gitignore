@@ -1,0 +1,4 @@
+config/*
+!config/caddy
+docker-compose.env
+app/node_modules
