@@ -19,13 +19,13 @@ async function getWireguardIp() {
     await container.start();
     const output = await container.logs({
       stdout: true,
-      details: false,
+      timestamps: true,
     });
     return output
       .toString()
       .trim()
       .split('\n')
-      .map((s) => s.replace('\x01\x00\x00\x00\x00\x00\x00\x10', ''))
+      .map((s) => s.split('Z ')[1])
       .reverse()[0];
   } catch (error) {
     return 'error';
