@@ -1,7 +1,8 @@
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
-import type { NextPage } from 'next';
+import type { GetServerSideProps, NextPage } from 'next';
 import { Container, ContainerStatus } from '../src/models/Docker';
 import { LoadingSpinner } from '../components/LoadingSpinner';
+import absoluteUrl from 'next-absolute-url';
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ');
@@ -37,12 +38,14 @@ const Status: React.FC<{ status: ContainerStatus }> = ({ status }) => {
   );
 };
 
-const Docker: NextPage = () => {
+const Docker: NextPage<{ containers: Container[] }> = (props) => {
   const [loading, setLoading] = useState(false);
   const checkbox = useRef<any>();
   const [checked, setChecked] = useState(false);
   const [indeterminate, setIndeterminate] = useState(false);
-  const [containers, setContainers] = useState<Container[]>([]);
+  const [containers, setContainers] = useState<Container[]>(
+    () => props.containers,
+  );
   const [selectedContainers, setSelectedContainers] = useState<Container[]>([]);
 
   async function getContainers() {
@@ -226,6 +229,15 @@ const Docker: NextPage = () => {
       </div>
     </div>
   );
+};
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const { origin } = absoluteUrl(context.req);
+  const res = await fetch(origin + '/api/docker');
+  const props = await res.json();
+  return {
+    props,
+  };
 };
 
 export default Docker;

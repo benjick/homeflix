@@ -1,7 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
-import type { NextPage } from 'next';
+import type { GetServerSideProps, NextPage } from 'next';
 import { XCircleIcon } from '@heroicons/react/solid';
 import { CheckCircleIcon } from '@heroicons/react/solid';
+import absoluteUrl from 'next-absolute-url';
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ');
@@ -45,63 +46,50 @@ const Success: React.FC<{ title: string; text: string }> = ({
   );
 };
 
-const Ip: NextPage = () => {
-  const [loading, setLoading] = useState(true);
-  const [ips, setIps] = useState<{
-    server: string;
-    wireguard: string;
-    logs?: string;
-  }>();
-
-  async function getContainers() {
-    setLoading(true);
-    const res = await fetch('/api/ip');
-    const json = await res.json();
-    setIps(json);
-    setLoading(false);
-  }
-
-  useEffect(() => {
-    getContainers();
-  }, []);
-
+const Ip: NextPage<{
+  server: string;
+  wireguard: string;
+  logs?: string;
+}> = ({ server, wireguard, logs }) => {
   const pre = useRef<HTMLPreElement>(null);
 
   useEffect(() => {
-    setTimeout(() => {
-      if (pre.current) {
-        pre.current.scroll({
-          top: pre.current.scrollHeight,
-          behavior: 'smooth',
-        });
-      }
-    }, 100);
-  }, [ips]);
+    if (pre.current) {
+      pre.current.scroll({
+        top: pre.current.scrollHeight,
+        behavior: 'smooth',
+      });
+    }
+  }, []);
 
-  if (loading || !ips) {
-    return null;
-  }
-
-  return (
-    <div className="px-4 sm:px-6 lg:px-8">
-      {ips.wireguard === 'error' ? (
+  function renderInfoBox() {
+    if (wireguard === 'error') {
+      return (
         <Alert
           text="Could probably not start the container, you might need to create it."
           title="Wireguard error"
         />
-      ) : undefined}
-      {ips.wireguard === ips.server ? (
+      );
+    }
+    if (wireguard === server) {
+      return (
         <Alert
           text="IP address are matching which means Wireguard probably isn't working. Check the logs."
           title="Wireguard error"
         />
-      ) : undefined}
-      {ips.wireguard !== 'error' && ips.wireguard !== ips.server ? (
-        <Success
-          text="It seems like everything is working!"
-          title="Wireguard success"
-        />
-      ) : undefined}
+      );
+    }
+    return (
+      <Success
+        text="It seems like everything is working!"
+        title="Wireguard success"
+      />
+    );
+  }
+
+  return (
+    <div className="px-4 sm:px-6 lg:px-8">
+      {renderInfoBox()}
       <h3 className="mt-5 text-lg leading-6 font-medium text-gray-900">
         IP addresses
       </h3>
@@ -111,7 +99,7 @@ const Ip: NextPage = () => {
             Server IP address
           </dt>
           <dd className="mt-1 text-3xl font-semibold text-gray-900">
-            <code>{ips.server}</code>
+            <code>{server}</code>
           </dd>
         </div>
         <div className="px-4 py-5 bg-white shadow rounded-lg overflow-hidden sm:p-6">
@@ -119,11 +107,11 @@ const Ip: NextPage = () => {
             Wireguard IP address
           </dt>
           <dd className="mt-1 text-3xl font-semibold text-gray-900">
-            <code>{ips.wireguard}</code>
+            <code>{wireguard}</code>
           </dd>
         </div>
       </dl>
-      {ips.logs ? (
+      {logs ? (
         <>
           <h3 className="mt-5 text-lg leading-6 font-medium text-gray-900">
             Wireguard container logs
@@ -132,12 +120,21 @@ const Ip: NextPage = () => {
             ref={pre}
             className="mt-5 h-96 text-sm overflow-scroll bg-black text-white p-2 rounded-lg"
           >
-            {ips.logs}
+            {logs}
           </pre>
         </>
       ) : undefined}
     </div>
   );
+};
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const { origin } = absoluteUrl(context.req);
+  const res = await fetch(origin + '/api/ip');
+  const props = await res.json();
+  return {
+    props,
+  };
 };
 
 export default Ip;
