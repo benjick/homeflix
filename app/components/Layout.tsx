@@ -12,6 +12,7 @@ import homeflix from '../public/images/homeflix.png';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { useSwipeable } from 'react-swipeable';
+import { Footer } from './Footer';
 
 const navigation = [
   { name: 'Dashboard', href: '/', icon: HomeIcon },
@@ -134,7 +135,7 @@ export const Layout: React.FC = ({ children }) => {
           </Dialog>
         </Transition.Root>
 
-        <div className="flex flex-col flex-1">
+        <div className="flex flex-col flex-1" {...handlers}>
           <div className="sticky top-0 z-10 pl-1 pt-1 sm:pl-3 sm:pt-3 bg-gray-100 flex">
             <button
               type="button"
@@ -154,13 +155,14 @@ export const Layout: React.FC = ({ children }) => {
               />
             </div>
           </div>
-          <main className="flex-1" {...handlers}>
+          <main className="flex-1">
             <div className="py-6">
               <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
                 {children}
               </div>
             </div>
           </main>
+          <Footer />
         </div>
       </div>
     </>
