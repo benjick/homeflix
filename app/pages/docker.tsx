@@ -184,6 +184,13 @@ const Docker: NextPage<{ containers: Container[] }> = (props) => {
                       <tr
                         key={container.id}
                         className={isSelected ? 'bg-gray-50' : undefined}
+                        onClick={(e) => {
+                          setSelectedContainers((state) =>
+                            !isSelected
+                              ? [...state, container]
+                              : state.filter((p) => p.id !== container.id),
+                          );
+                        }}
                       >
                         <td className="relative w-12 px-6 sm:w-16 sm:px-8">
                           {isSelected && (
@@ -195,13 +202,6 @@ const Docker: NextPage<{ containers: Container[] }> = (props) => {
                             value={container.id}
                             checked={isSelected}
                             disabled={loading}
-                            onChange={(e) =>
-                              setSelectedContainers((state) =>
-                                e.target.checked
-                                  ? [...state, container]
-                                  : state.filter((p) => p.id !== container.id),
-                              )
-                            }
                           />
                         </td>
                         <td
