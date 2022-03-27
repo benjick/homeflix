@@ -8,6 +8,14 @@ import radarr from '../public/images/radarr-gs.png';
 import nzbhydra2 from '../public/images/nzbhydra2-gs.png';
 import tautulli from '../public/images/tautulli-gs.png';
 
+const links = {
+  sonarr,
+  radarr,
+  sabnzbd,
+  nzbhydra2,
+  tautulli,
+};
+
 const Home: NextPage = () => {
   return (
     <div>
@@ -18,36 +26,16 @@ const Home: NextPage = () => {
       </Head>
 
       <main>
-        <Image src={homeflix} alt="logo" className="w-auto" />
+        <div className="text-center">
+          <Image src={homeflix} alt="logo" className="w-auto" />
+        </div>
 
-        <div>
-          <ul>
-            <li>
-              <a href="/sabnzbd/" className="w-auto block px-8 py-2">
-                <Image src={sabnzbd} alt="logo" />
-              </a>
-            </li>
-            <li>
-              <a href="/sonarr/" className="w-auto block px-8 py-2">
-                <Image src={sonarr} alt="logo" />
-              </a>
-            </li>
-            <li>
-              <a href="/radarr/" className="w-auto block px-8 py-2">
-                <Image src={radarr} alt="logo" />
-              </a>
-            </li>
-            <li>
-              <a href="/nzbhydra2/" className="w-auto block px-8 py-2">
-                <Image src={nzbhydra2} alt="logo" />
-              </a>
-            </li>
-            <li>
-              <a href="/tautulli/" className="w-auto block px-8 py-2">
-                <Image src={tautulli} alt="logo" />
-              </a>
-            </li>
-          </ul>
+        <div className="grid grid-cols-1 md:grid-cols-3">
+          {Object.entries(links).map(([key, image]) => (
+            <a key={key} href={`/${key}/`} className="w-auto block px-12 py-2">
+              <Image src={image} alt="logo" />
+            </a>
+          ))}
         </div>
       </main>
     </div>
