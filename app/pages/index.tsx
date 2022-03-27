@@ -26,10 +26,6 @@ const Home: NextPage = () => {
       </Head>
 
       <main>
-        <div className="text-center">
-          <Image src={homeflix} alt="logo" className="w-auto" />
-        </div>
-
         <div className="grid grid-cols-1 md:grid-cols-3">
           {Object.entries(links).map(([key, image]) => (
             <a key={key} href={`/${key}/`} className="w-auto block px-12 py-2">
