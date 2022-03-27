@@ -133,8 +133,10 @@ services:
 
   app:
     build: app
+    container_name: app
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
+      - ./docker-compose.yml:/docker-compose.yml
     expose:
       - 3000
     restart: unless-stopped
