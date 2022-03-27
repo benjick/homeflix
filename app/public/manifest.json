@@ -2,7 +2,7 @@
   "name": "Homeflix",
   "short_name": "",
   "theme_color": "#1F2937",
-  "background_color": "#1F2937",
+  "background_color": "#000000",
   "display": "standalone",
   "orientation": "portrait",
   "scope": "/",
