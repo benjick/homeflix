@@ -10,6 +10,7 @@ import {
 import homeflix from '../public/images/homeflix.png';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
+import { useSwipeable } from 'react-swipeable';
 
 const navigation = [
   { name: 'Dashboard', href: '/', icon: HomeIcon },
@@ -23,6 +24,15 @@ function classNames(...classes: string[]) {
 export const Layout: React.FC = ({ children }) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const { pathname } = useRouter();
+  const handlers = useSwipeable({
+    onSwipedRight: (event) => {
+      if (event.initial[0] < window.innerWidth / 3) {
+        setSidebarOpen(true);
+      }
+    },
+    trackMouse: true,
+    preventDefaultTouchmoveEvent: true,
+  });
 
   return (
     <>
@@ -133,7 +143,7 @@ export const Layout: React.FC = ({ children }) => {
               <MenuIcon className="h-6 w-6" aria-hidden="true" />
             </button>
           </div>
-          <main className="flex-1">
+          <main className="flex-1" {...handlers}>
             <div className="py-6">
               <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
                 {children}
