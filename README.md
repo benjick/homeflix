@@ -19,3 +19,12 @@ Under Settings -> Network set "List of IP addresses and networks that are allowe
 > By adding the IP address http://192.168.86.100:32400/ to Settings -> Network -> Custom Server Access URLs it now shows up in plex.tv/api/resources?X-Plex-Token=xxx as a connection string and direct connection has been successfully established.
 
 Source: https://www.reddit.com/r/PleX/comments/mpwc8r/linuxserverplex_limited_to_indirect_connection/
+
+## Wireguard
+
+1. Go to https://mullvad.net/en/account/#/wireguard-config and generate a configuration file for Linux
+2. Start the wireguard container: `docker-compose up wireguard`
+3. Stop the container
+4. Put the config-file from step 1 in `./wireguard/wg0.conf`
+5. Remove any IPv6 addresses from the file
+6. Run `docker-compose up wireguard` to see if you get a Mullvad ip address

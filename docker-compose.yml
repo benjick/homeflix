@@ -48,6 +48,9 @@ services:
       - /mnt/e/Warez/Usenet:/downloads
     ports:
       - 8081:8080
+    depends_on:
+      - wireguard
+    network_mode: service:wireguard
     expose:
       - 8080
     restart: unless-stopped
@@ -139,6 +142,32 @@ services:
     expose:
       - 3000
     restart: unless-stopped
+
+  wireguard:
+    image: linuxserver/wireguard
+    container_name: wireguard
+    sysctls:
+      - net.ipv4.conf.all.src_valid_mark=1
+    cap_add:
+      - NET_ADMIN
+      - SYS_MODULE
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Stockholm
+    volumes:
+      - ./wireguard:/config
+      - /lib/modules:/lib/modules
+    ports:
+      - 51820:51820
+    restart: unless-stopped
+
+  test-wireguard:
+    image: alpine
+    depends_on:
+      - wireguard
+    network_mode: service:wireguard
+    command: sh -c 'sleep 1; wget -q -O - https://ifconfig.me/ip; echo'
 
 volumes:
   caddy_data:
