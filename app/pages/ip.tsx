@@ -2,7 +2,6 @@ import { useEffect, useRef, useState } from 'react';
 import type { GetServerSideProps, NextPage } from 'next';
 import { XCircleIcon } from '@heroicons/react/solid';
 import { CheckCircleIcon } from '@heroicons/react/solid';
-import absoluteUrl from 'next-absolute-url';
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ');
