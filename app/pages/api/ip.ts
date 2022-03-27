@@ -17,6 +17,7 @@ async function getWireguardLogs() {
   try {
     const output = await container.logs({
       stdout: true,
+      stderr: true,
       timestamps: true,
     });
     return cleanLogs(output);
