@@ -129,8 +129,7 @@ const Ip: NextPage<{
 };
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const { origin } = absoluteUrl(context.req);
-  const res = await fetch(origin + '/api/ip');
+  const res = await fetch('http://localhost:3000/api/ip');
   const props = await res.json();
   return {
     props,

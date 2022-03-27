@@ -2,7 +2,6 @@ import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import type { GetServerSideProps, NextPage } from 'next';
 import { Container, ContainerStatus } from '../src/models/Docker';
 import { LoadingSpinner } from '../components/LoadingSpinner';
-import absoluteUrl from 'next-absolute-url';
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ');
@@ -232,8 +231,7 @@ const Docker: NextPage<{ containers: Container[] }> = (props) => {
 };
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const { origin } = absoluteUrl(context.req);
-  const res = await fetch(origin + '/api/docker');
+  const res = await fetch('http://localhost:3000/api/docker');
   const props = await res.json();
   return {
     props,
