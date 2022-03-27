@@ -163,6 +163,7 @@ services:
     restart: unless-stopped
 
   test-wireguard:
+    container_name: test-wireguard
     image: alpine
     depends_on:
       - wireguard

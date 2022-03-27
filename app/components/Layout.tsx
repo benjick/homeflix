@@ -6,6 +6,7 @@ import {
   MenuIcon,
   XIcon,
   AdjustmentsIcon,
+  InformationCircleIcon,
 } from '@heroicons/react/outline';
 import homeflix from '../public/images/homeflix.png';
 import Image from 'next/image';
@@ -15,6 +16,7 @@ import { useSwipeable } from 'react-swipeable';
 const navigation = [
   { name: 'Dashboard', href: '/', icon: HomeIcon },
   { name: 'Docker', href: '/docker', icon: AdjustmentsIcon },
+  { name: 'IP addresses', href: '/ip', icon: InformationCircleIcon },
 ];
 
 function classNames(...classes: string[]) {
