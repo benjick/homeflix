@@ -4,7 +4,7 @@ services:
     image: linuxserver/plex
     container_name: plex
     volumes:
-      - ./config/plex:/config
+      - /mnt/e/homeflix/config/plex:/config
       - /mnt/e/Warez:/warez/e
       - /mnt/f/Warez:/warez/f
       - /mnt/g/Warez:/warez/g
@@ -44,7 +44,7 @@ services:
       - TZ=Europe/Stockholm
       - HAS_IPV6=false
     volumes:
-      - ./config/sabnzbd:/config
+      - /mnt/e/homeflix/config/sabnzbd:/config
       - /mnt/e/Warez/Usenet:/downloads
     ports:
       - 8081:8080
@@ -60,7 +60,7 @@ services:
       - PGID=1000
       - TZ=Europe/Stockholm
     volumes:
-      - ./config/sonarr:/config
+      - /mnt/e/homeflix/config/sonarr:/config
       - /mnt/e/Warez:/warez/e
       - /mnt/f/Warez:/warez/f
       - /mnt/g/Warez:/warez/g
@@ -77,7 +77,7 @@ services:
       - PGID=1000
       - TZ=Europe/Stockholm
     volumes:
-      - ./config/radarr:/config
+      - /mnt/e/homeflix/config/radarr:/config
       - /mnt/e/Warez:/warez/e
       - /mnt/g/Warez:/warez/g
       - /mnt/e/Warez/Usenet:/downloads
@@ -93,7 +93,7 @@ services:
       - PGID=1000
       - TZ=Europe/Stockholm
     volumes:
-      - ./config/tautulli:/config
+      - /mnt/e/homeflix/config/tautulli:/config
     ports:
       - 8181:8181
     expose:
@@ -108,7 +108,7 @@ services:
       - PGID=1000
       - TZ=Europe/Stockholm
     volumes:
-      - ./config/nzbhydra2:/config
+      - /mnt/e/homeflix/config/nzbhydra2:/config
       - /mnt/e/Warez/Usenet/nzb:/downloads
     ports:
       - 5076:5076
@@ -117,14 +117,13 @@ services:
     restart: unless-stopped
 
   caddy:
-    build: config/caddy
+    build: caddy
     container_name: caddy
     ports:
       - 80:80
       - 443:443
     volumes:
-      - ./config/caddy/Caddyfile:/etc/caddy/Caddyfile
-      - ./config/caddy/site:/srv
+      - ./caddy/Caddyfile:/etc/caddy/Caddyfile
       - caddy_data:/data
       - caddy_config:/config
     env_file:
@@ -145,3 +144,4 @@ volumes:
   caddy_data:
     external: true
   caddy_config:
+  app_error:

@@ -1,6 +1,4 @@
 config/*
-!config/caddy
-!config/migrate
 docker-compose.env
 app/node_modules
-config/migrate/node_modules
+migrate/node_modules
