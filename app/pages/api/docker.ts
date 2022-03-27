@@ -11,7 +11,7 @@ const filename =
   process.env.NODE_ENV === 'production'
     ? '/docker-compose.yml'
     : path.resolve(__dirname, '../../../../../docker-compose.yml');
-
+console.log('filename', filename);
 type Data = {
   containers: Container[];
 };

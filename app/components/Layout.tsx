@@ -23,7 +23,6 @@ function classNames(...classes: string[]) {
 export const Layout: React.FC = ({ children }) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const { pathname } = useRouter();
-  console.log('pathname', pathname);
 
   return (
     <>
