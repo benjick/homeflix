@@ -58,7 +58,7 @@ const Loading: React.FC = () => (
 
 const Docker: NextPage = () => {
   const [loading, setLoading] = useState(false);
-  const checkbox = useRef<HTMLInputElement>();
+  const checkbox = useRef<any>();
   const [checked, setChecked] = useState(false);
   const [indeterminate, setIndeterminate] = useState(false);
   const [containers, setContainers] = useState<Container[]>([]);
