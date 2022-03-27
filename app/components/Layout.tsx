@@ -92,7 +92,7 @@ export const Layout: React.FC = ({ children }) => {
                 </Transition.Child>
                 <div className="flex-1 h-0 pt-5 pb-4 overflow-y-auto">
                   <div className="flex-shrink-0 flex items-center px-4">
-                    <div className="w-40">
+                    <div className="w-full px-16">
                       <Image src={homeflix} alt="Homeflix" />
                     </div>
                   </div>
@@ -146,9 +146,10 @@ export const Layout: React.FC = ({ children }) => {
               <MenuIcon className="h-6 w-6" aria-hidden="true" />
             </button>
 
-            <div className="h-12 w-full">
+            <div className="h-12 max-h-12 w-full text-center mr-12">
               <Image
                 src={homeflix}
+                width="290px"
                 height="48px"
                 objectFit="contain"
                 alt="Homeflix"
