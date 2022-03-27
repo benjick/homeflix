@@ -16,8 +16,11 @@ const Status: React.FC<{ status: ContainerStatus }> = ({ status }) => {
 
     case 'missing':
     case 'unknown':
-    case 'exited':
       colors = 'bg-red-100 text-red-800';
+      break;
+
+    case 'exited':
+      colors = 'bg-blue-100 text-blue-800';
       break;
 
     default:
