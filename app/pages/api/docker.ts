@@ -13,7 +13,7 @@ const filename =
     : path.resolve(__dirname, '../../../../../docker-compose.yml');
 
 type Data = {
-  services: Container[];
+  containers: Container[];
 };
 
 function determineContainerStatus(
@@ -34,15 +34,13 @@ function determineContainerStatus(
   return 'unknown';
 }
 
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse<Data>,
-) {
+async function getContainers() {
   const file = fs.readFileSync(filename, 'utf-8');
   const json = yaml.parse(file);
-  const services = Object.keys(json.services).sort();
-  const resolved = await Promise.all(
-    services.map(async (service) => {
+  const containers = Object.keys(json.services).sort();
+
+  return Promise.all(
+    containers.map(async (service) => {
       const isBuild = !!json.services[service].build;
       const container = docker.getContainer(service);
       let status: ContainerStatus = 'unknown';
@@ -59,5 +57,62 @@ export default async function handler(
       };
     }),
   );
-  res.status(200).json({ services: resolved });
+}
+
+async function restartContainers(containers: string[]) {
+  await Promise.all(
+    containers.map(async (service) => {
+      try {
+        const container = docker.getContainer(service);
+        await container.restart();
+      } catch (error) {
+        // eat error
+      }
+    }),
+  );
+}
+
+async function startContainers(containers: string[]) {
+  await Promise.all(
+    containers.map(async (service) => {
+      try {
+        const container = docker.getContainer(service);
+        await container.start();
+      } catch (error) {
+        // eat error
+      }
+    }),
+  );
+}
+
+async function stopContainers(containers: string[]) {
+  await Promise.all(
+    containers.map(async (service) => {
+      try {
+        const container = docker.getContainer(service);
+        await container.stop();
+      } catch (error) {
+        // eat error
+      }
+    }),
+  );
+}
+
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse<Data>,
+) {
+  const containers = await getContainers();
+  if (req.method === 'POST') {
+    if (req.body.action === 'restart' && req.body.containers) {
+      await restartContainers(req.body.containers);
+    }
+    if (req.body.action === 'stop' && req.body.containers) {
+      await stopContainers(req.body.containers);
+    }
+    if (req.body.action === 'start' && req.body.containers) {
+      await startContainers(req.body.containers);
+    }
+  }
+  res.status(200).json({ containers });
 }

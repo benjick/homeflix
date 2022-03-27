@@ -1,4 +1,4 @@
-import { LegacyRef, useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import type { NextPage } from 'next';
 import { Container, ContainerStatus } from '../src/models/Docker';
 
@@ -33,17 +33,57 @@ const Status: React.FC<{ status: ContainerStatus }> = ({ status }) => {
   );
 };
 
+const Loading: React.FC = () => (
+  <svg
+    className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
+    xmlns="http://www.w3.org/2000/svg"
+    fill="none"
+    viewBox="0 0 24 24"
+  >
+    <circle
+      className="opacity-25"
+      cx="12"
+      cy="12"
+      r="10"
+      stroke="currentColor"
+      strokeWidth="4"
+    ></circle>
+    <path
+      className="opacity-75"
+      fill="currentColor"
+      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+    ></path>
+  </svg>
+);
+
 const Docker: NextPage = () => {
+  const [loading, setLoading] = useState(false);
   const checkbox = useRef<HTMLInputElement>();
   const [checked, setChecked] = useState(false);
   const [indeterminate, setIndeterminate] = useState(false);
   const [containers, setContainers] = useState<Container[]>([]);
   const [selectedContainers, setSelectedContainers] = useState<Container[]>([]);
 
-  function getContainers() {
-    fetch('/api/docker')
-      .then((res) => res.json())
-      .then((json) => setContainers(json.services));
+  async function getContainers() {
+    const res = await fetch('/api/docker');
+    const json = await res.json();
+    setContainers(json.containers);
+  }
+
+  async function containerAction(action: 'restart' | 'stop' | 'start') {
+    setLoading(true);
+    await fetch('/api/docker', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        action,
+        containers: selectedContainers.map((container) => container.id),
+      }),
+    });
+    await getContainers();
+    setLoading(false);
   }
 
   useEffect(() => {
@@ -82,15 +122,6 @@ const Docker: NextPage = () => {
             A list of all the docker images present in docker-compose.yml.
           </p>
         </div>
-        <div className="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
-          <button
-            type="button"
-            onClick={() => getContainers()}
-            className="inline-flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:w-auto"
-          >
-            Refresh
-          </button>
-        </div>
       </div>
       <div className="mt-8 flex flex-col">
         <div className="-my-2 -mx-4 overflow-x-auto sm:-mx-6 lg:-mx-8">
@@ -100,10 +131,30 @@ const Docker: NextPage = () => {
                 <div className="absolute top-0 left-12 flex h-12 items-center space-x-3 bg-gray-50 sm:left-16">
                   <button
                     type="button"
-                    onClick={() => alert('Coming soon!')}
-                    className="inline-flex items-center rounded border border-gray-300 bg-white px-2.5 py-1.5 text-xs font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-30"
+                    disabled={loading}
+                    onClick={() => containerAction('restart')}
+                    className="inline-flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-2.5 py-1.5 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-30"
                   >
+                    {loading ? <Loading /> : undefined}
                     Restart
+                  </button>
+                  <button
+                    type="button"
+                    disabled={loading}
+                    onClick={() => containerAction('start')}
+                    className="inline-flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-2.5 py-1.5 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-30"
+                  >
+                    {loading ? <Loading /> : undefined}
+                    Start
+                  </button>
+                  <button
+                    type="button"
+                    disabled={loading}
+                    onClick={() => containerAction('stop')}
+                    className="inline-flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-2.5 py-1.5 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-30"
+                  >
+                    {loading ? <Loading /> : undefined}
+                    Stop
                   </button>
                 </div>
               )}
@@ -168,12 +219,10 @@ const Docker: NextPage = () => {
                             value={container.id}
                             checked={isSelected}
                             onChange={(e) =>
-                              setSelectedContainers(
+                              setSelectedContainers((state) =>
                                 e.target.checked
-                                  ? [...selectedContainers, container]
-                                  : selectedContainers.filter(
-                                      (p) => p !== container,
-                                    ),
+                                  ? [...state, container]
+                                  : state.filter((p) => p.id !== container.id),
                               )
                             }
                           />
