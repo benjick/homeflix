@@ -7,7 +7,7 @@ import {
   XIcon,
   AdjustmentsIcon,
 } from '@heroicons/react/outline';
-import homeflix from '../public/homeflix.png';
+import homeflix from '../public/images/homeflix.png';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 

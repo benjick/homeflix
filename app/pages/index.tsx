@@ -1,12 +1,12 @@
 import type { NextPage } from 'next';
 import Head from 'next/head';
 import Image from 'next/image';
-import homeflix from '../public/homeflix.png';
-import sabnzbd from '../public/sabnzbd-gs.png';
-import sonarr from '../public/sonarr-gs.png';
-import radarr from '../public/radarr-gs.png';
-import nzbhydra2 from '../public/nzbhydra2-gs.png';
-import tautulli from '../public/tautulli-gs.png';
+import homeflix from '../public/images/homeflix.png';
+import sabnzbd from '../public/images/sabnzbd-gs.png';
+import sonarr from '../public/images/sonarr-gs.png';
+import radarr from '../public/images/radarr-gs.png';
+import nzbhydra2 from '../public/images/nzbhydra2-gs.png';
+import tautulli from '../public/images/tautulli-gs.png';
 
 const Home: NextPage = () => {
   return (
