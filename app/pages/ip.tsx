@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import type { NextPage } from 'next';
 import { XCircleIcon } from '@heroicons/react/solid';
 import { CheckCircleIcon } from '@heroicons/react/solid';
@@ -50,6 +50,7 @@ const Ip: NextPage = () => {
   const [ips, setIps] = useState<{
     server: string;
     wireguard: string;
+    logs?: string;
   }>();
 
   async function getContainers() {
@@ -63,6 +64,19 @@ const Ip: NextPage = () => {
   useEffect(() => {
     getContainers();
   }, []);
+
+  const pre = useRef<HTMLPreElement>(null);
+
+  useEffect(() => {
+    setTimeout(() => {
+      if (pre.current) {
+        pre.current.scroll({
+          top: pre.current.scrollHeight,
+          behavior: 'smooth',
+        });
+      }
+    }, 100);
+  }, [ips]);
 
   if (loading || !ips) {
     return null;
@@ -109,6 +123,19 @@ const Ip: NextPage = () => {
           </dd>
         </div>
       </dl>
+      {ips.logs ? (
+        <>
+          <h3 className="mt-5 text-lg leading-6 font-medium text-gray-900">
+            Wireguard container logs
+          </h3>
+          <pre
+            ref={pre}
+            className="mt-5 h-96 text-sm overflow-scroll bg-black text-white p-2 rounded-lg"
+          >
+            {ips.logs}
+          </pre>
+        </>
+      ) : undefined}
     </div>
   );
 };

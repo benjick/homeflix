@@ -1,11 +1,29 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import * as yaml from 'yaml';
-import * as path from 'path';
-import * as fs from 'fs';
 import Docker from 'dockerode';
-import { Container, ContainerStatus } from '../../src/models/Docker';
 
 const docker = new Docker({ socketPath: '/var/run/docker.sock' });
+
+function cleanLogs(logs: NodeJS.ReadableStream) {
+  return logs
+    .toString()
+    .trim()
+    .split('\n')
+    .map((s) => s.split('Z ')[1])
+    .join('\n');
+}
+
+async function getWireguardLogs() {
+  const container = docker.getContainer('wireguard');
+  try {
+    const output = await container.logs({
+      stdout: true,
+      timestamps: true,
+    });
+    return cleanLogs(output);
+  } catch (error) {
+    return;
+  }
+}
 
 async function getServerIp() {
   const res = await fetch('https://ifconfig.me/ip');
@@ -21,12 +39,7 @@ async function getWireguardIp() {
       stdout: true,
       timestamps: true,
     });
-    return output
-      .toString()
-      .trim()
-      .split('\n')
-      .map((s) => s.split('Z ')[1])
-      .reverse()[0];
+    return cleanLogs(output).split('\n').reverse()[0];
   } catch (error) {
     return 'error';
   }
@@ -35,15 +48,17 @@ async function getWireguardIp() {
 interface Data {
   server: string;
   wireguard: string;
+  logs?: string;
 }
 
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<Data>,
 ) {
-  const [server, wireguard] = await Promise.all([
+  const [server, wireguard, logs] = await Promise.all([
     getServerIp(),
     getWireguardIp(),
+    getWireguardLogs(),
   ]);
-  res.status(200).json({ server, wireguard });
+  res.status(200).json({ server, wireguard, logs });
 }
