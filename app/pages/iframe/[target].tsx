@@ -1,12 +1,8 @@
-import { useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import type { GetServerSideProps, NextPage } from 'next';
-import { useRouter } from 'next/router';
 import { services } from '../../src/services';
 
 const Iframe: NextPage<{ link: string }> = ({ link }) => {
-  const router = useRouter();
-  const { target } = router.query;
-
   const iframe = useRef<HTMLIFrameElement>(null);
 
   function onIframeLoad() {
@@ -17,6 +13,13 @@ const Iframe: NextPage<{ link: string }> = ({ link }) => {
         'px';
     }
   }
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      onIframeLoad();
+    }, 500);
+    return () => clearInterval(interval);
+  }, []);
 
   return (
     <iframe
