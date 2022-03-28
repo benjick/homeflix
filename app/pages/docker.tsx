@@ -2,6 +2,7 @@ import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import type { GetServerSideProps, NextPage } from 'next';
 import { Container, ContainerStatus } from '../src/models/Docker';
 import { LoadingSpinner } from '../components/LoadingSpinner';
+import TimeAgo from 'timeago-react';
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ');
@@ -172,6 +173,12 @@ const Docker: NextPage<{ containers: Container[] }> = (props) => {
                     >
                       Type
                     </th>
+                    <th
+                      scope="col"
+                      className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                    >
+                      Started
+                    </th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-200 bg-white">
@@ -216,6 +223,11 @@ const Docker: NextPage<{ containers: Container[] }> = (props) => {
                         </td>
                         <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                           {container.isBuild ? '🔨' : '☁️'}
+                        </td>
+                        <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                          {container.started ? (
+                            <TimeAgo datetime={container.started} />
+                          ) : undefined}
                         </td>
                       </tr>
                     );

@@ -1,7 +1,6 @@
 import type { NextPage } from 'next';
 import Head from 'next/head';
 import Image from 'next/image';
-import homeflix from '../public/images/homeflix.png';
 import sabnzbd from '../public/images/sabnzbd-gs.png';
 import sonarr from '../public/images/sonarr-gs.png';
 import radarr from '../public/images/radarr-gs.png';

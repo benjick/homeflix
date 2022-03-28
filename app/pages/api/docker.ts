@@ -11,7 +11,7 @@ const filename =
   process.env.NODE_ENV === 'production'
     ? '/docker-compose.yml'
     : path.resolve(__dirname, '../../../../../docker-compose.yml');
-console.log('filename', filename);
+
 type Data = {
   containers: Container[];
 };
@@ -34,7 +34,7 @@ function determineContainerStatus(
   return 'unknown';
 }
 
-async function getContainers() {
+async function getContainers(): Promise<Container[]> {
   const file = fs.readFileSync(filename, 'utf-8');
   const json = yaml.parse(file);
   const containers = Object.keys(json.services).sort();
@@ -44,9 +44,12 @@ async function getContainers() {
       const isBuild = !!json.services[service].build;
       const container = docker.getContainer(service);
       let status: ContainerStatus = 'unknown';
+      let started: string | undefined;
       try {
         const inspectionInfo = await container.inspect();
         status = determineContainerStatus(inspectionInfo.State);
+        started =
+          status === 'running' ? inspectionInfo.State.StartedAt : undefined;
       } catch (error) {
         status = 'missing';
       }
@@ -54,6 +57,7 @@ async function getContainers() {
         id: service,
         status,
         isBuild,
+        started,
       };
     }),
   );
