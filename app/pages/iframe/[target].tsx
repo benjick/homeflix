@@ -37,7 +37,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       },
     };
   }
-  const service = services.find((service) => service.link === `/${target}`);
+  const service = services.find((service) => service.link === `/${target}/`);
   if (!service) {
     return {
       notFound: true,
