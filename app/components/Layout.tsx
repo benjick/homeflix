@@ -114,8 +114,8 @@ export const Layout: React.FC = ({ children }) => {
             <div className="py-6">
               <div
                 className={classNames(
-                  'max-w-7xl mx-auto',
-                  !isIframe ? 'px-4 sm:px-6 md:px-8' : '',
+                  'mx-auto',
+                  !isIframe ? 'max-w-7xl px-4 sm:px-6 md:px-8' : '',
                 )}
               >
                 {children}
