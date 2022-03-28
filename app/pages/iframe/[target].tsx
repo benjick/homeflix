@@ -9,7 +9,6 @@ const Iframe: NextPage<{ link: string }> = ({ link }) => {
     if (iframe.current?.contentWindow) {
       iframe.current.style.height =
         iframe.current.contentWindow.document.documentElement.scrollHeight +
-        20 +
         'px';
     }
   }
