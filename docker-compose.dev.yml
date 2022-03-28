@@ -1,0 +1,14 @@
+version: "2.4"
+services:
+  app:
+    image: node:16-slim
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./docker-compose.yml:/docker-compose.yml
+      - ./app/:/app
+      - /app/node_modules
+    command: [ sh, -c, "cd /app && yarn && yarn dev" ]
+    env_file:
+      - docker-compose.env
+    ports:
+      - 3000:3000

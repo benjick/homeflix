@@ -139,6 +139,8 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - ./docker-compose.yml:/docker-compose.yml
+    env_file:
+      - docker-compose.env
     expose:
       - 3000
     restart: unless-stopped
