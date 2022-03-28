@@ -7,8 +7,11 @@ import { useSwipeable } from 'react-swipeable';
 import { Footer } from './Footer';
 import { useSidebar } from '../src/state/global';
 import { Sidebar } from './Sidebar';
+import { useRouter } from 'next/router';
 
 export const Layout: React.FC = ({ children }) => {
+  const { pathname } = useRouter();
+  const isIframe = pathname.startsWith('/iframe');
   const { sidebarOpen, setSidebarOpen } = useSidebar();
   const handlers = useSwipeable({
     onSwipedRight: (event) => {
@@ -19,6 +22,10 @@ export const Layout: React.FC = ({ children }) => {
     trackMouse: true,
     preventDefaultTouchmoveEvent: true,
   });
+
+  function classNames(...classes: string[]) {
+    return classes.filter(Boolean).join(' ');
+  }
 
   return (
     <>
@@ -105,7 +112,12 @@ export const Layout: React.FC = ({ children }) => {
           </div>
           <main className="flex-1">
             <div className="py-6">
-              <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
+              <div
+                className={classNames(
+                  'max-w-7xl mx-auto',
+                  !isIframe ? 'px-4 sm:px-6 md:px-8' : '',
+                )}
+              >
                 {children}
               </div>
             </div>

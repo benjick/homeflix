@@ -3,10 +3,6 @@ import type { GetServerSideProps, NextPage } from 'next';
 import { XCircleIcon } from '@heroicons/react/solid';
 import { CheckCircleIcon } from '@heroicons/react/solid';
 
-function classNames(...classes: string[]) {
-  return classes.filter(Boolean).join(' ');
-}
-
 const Alert: React.FC<{ title: string; text: string }> = ({ title, text }) => {
   return (
     <div className="rounded-md bg-red-50 p-4">
