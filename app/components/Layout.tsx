@@ -1,32 +1,15 @@
-import { Fragment, useState } from 'react';
-import Link from 'next/link';
+import { Fragment } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
-import {
-  HomeIcon,
-  MenuIcon,
-  XIcon,
-  AdjustmentsIcon,
-  InformationCircleIcon,
-} from '@heroicons/react/outline';
+import { MenuIcon, XIcon } from '@heroicons/react/outline';
 import homeflix from '../public/images/homeflix.png';
 import Image from 'next/image';
-import { useRouter } from 'next/router';
 import { useSwipeable } from 'react-swipeable';
 import { Footer } from './Footer';
-
-const navigation = [
-  { name: 'Dashboard', href: '/', icon: HomeIcon },
-  { name: 'Docker', href: '/docker', icon: AdjustmentsIcon },
-  { name: 'IP addresses', href: '/ip', icon: InformationCircleIcon },
-];
-
-function classNames(...classes: string[]) {
-  return classes.filter(Boolean).join(' ');
-}
+import { useSidebar } from '../src/state/global';
+import { Sidebar } from './Sidebar';
 
 export const Layout: React.FC = ({ children }) => {
-  const [sidebarOpen, setSidebarOpen] = useState(false);
-  const { pathname } = useRouter();
+  const { sidebarOpen, setSidebarOpen } = useSidebar();
   const handlers = useSwipeable({
     onSwipedRight: (event) => {
       if (event.initial[0] < window.innerWidth / 3) {
@@ -90,43 +73,7 @@ export const Layout: React.FC = ({ children }) => {
                     </button>
                   </div>
                 </Transition.Child>
-                <div className="flex-1 h-0 pt-5 pb-4 overflow-y-auto">
-                  <div className="flex-shrink-0 flex items-center px-4">
-                    <div className="w-full px-16">
-                      <Image src={homeflix} alt="Homeflix" />
-                    </div>
-                  </div>
-                  <nav className="mt-5 px-2 space-y-1">
-                    {navigation.map((item) => {
-                      const current = pathname === item.href;
-                      return (
-                        <Link href={item.href} key={item.name}>
-                          <a
-                            href={item.href}
-                            onClick={() => setSidebarOpen(false)}
-                            className={classNames(
-                              current
-                                ? 'bg-gray-900 text-white'
-                                : 'text-gray-300 hover:bg-gray-700 hover:text-white',
-                              'group flex items-center px-2 py-2 text-base font-medium rounded-md',
-                            )}
-                          >
-                            <item.icon
-                              className={classNames(
-                                current
-                                  ? 'text-gray-300'
-                                  : 'text-gray-400 group-hover:text-gray-300',
-                                'mr-4 flex-shrink-0 h-6 w-6',
-                              )}
-                              aria-hidden="true"
-                            />
-                            {item.name}
-                          </a>
-                        </Link>
-                      );
-                    })}
-                  </nav>
-                </div>
+                <Sidebar />
               </div>
             </Transition.Child>
             <div className="flex-shrink-0 w-14">
