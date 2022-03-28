@@ -38,7 +38,6 @@ export const Sidebar: React.FC = () => {
             return (
               <Link href={item.href} key={item.name}>
                 <a
-                  href={item.href}
                   onClick={() => setSidebarOpen(false)}
                   className={classNames(
                     current
@@ -74,18 +73,20 @@ export const Sidebar: React.FC = () => {
               const current =
                 pathname === '/iframe/[target]' && query?.target === item.id;
               return (
-                <a
-                  key={item.name}
-                  href={`/iframe/${item.id}`}
-                  className={classNames(
-                    current
-                      ? 'bg-gray-900 text-white'
-                      : 'text-gray-300 hover:bg-gray-700 hover:text-white',
-                    'group flex items-center px-3 py-2 text-sm font-medium rounded-md',
-                  )}
-                >
-                  <span className="truncate">{item.name}</span>
-                </a>
+                <Link href={`/iframe/${item.id}`} key={item.name}>
+                  <a
+                    key={item.name}
+                    onClick={() => setSidebarOpen(false)}
+                    className={classNames(
+                      current
+                        ? 'bg-gray-900 text-white'
+                        : 'text-gray-300 hover:bg-gray-700 hover:text-white',
+                      'group flex items-center px-3 py-2 text-sm font-medium rounded-md',
+                    )}
+                  >
+                    <span className="truncate">{item.name}</span>
+                  </a>
+                </Link>
               );
             })}
           </div>
