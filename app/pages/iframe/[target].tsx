@@ -1,31 +1,18 @@
-import { useEffect, useRef } from 'react';
+import { useEffect } from 'react';
 import type { GetServerSideProps, NextPage } from 'next';
 import { services } from '../../src/services';
 
 const Iframe: NextPage<{ link: string }> = ({ link }) => {
-  const iframe = useRef<HTMLIFrameElement>(null);
-
-  function onIframeLoad() {
-    if (iframe.current?.contentWindow) {
-      iframe.current.style.height =
-        iframe.current.contentWindow.document.documentElement.scrollHeight +
-        'px';
-    }
-  }
-
   useEffect(() => {
-    const interval = setInterval(() => {
-      onIframeLoad();
-    }, 500);
-    return () => clearInterval(interval);
+    document.body.classList.add('overflow-hidden');
+    return () => document.body.classList.remove('overflow-hidden');
   }, []);
 
   return (
     <iframe
-      className="-mt-6 w-full"
-      ref={iframe}
+      className="-my-6 w-full"
+      style={{ height: 'calc(100vh - 52px)' }}
       src={link}
-      onLoad={onIframeLoad}
     />
   );
 };
@@ -39,7 +26,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       },
     };
   }
-  const service = services.find((service) => service.link === `/${target}/`);
+  const service = services.find((service) => service.id === target);
   if (!service) {
     return {
       notFound: true,

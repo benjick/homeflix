@@ -22,7 +22,7 @@ function classNames(...classes: string[]) {
 
 export const Sidebar: React.FC = () => {
   const { setSidebarOpen } = useSidebar();
-  const { pathname } = useRouter();
+  const { pathname, query } = useRouter();
 
   return (
     <div className="flex-1 h-0 pt-5 pb-4 overflow-y-auto">
@@ -70,15 +70,24 @@ export const Sidebar: React.FC = () => {
             Services
           </h3>
           <div>
-            {services.map((item) => (
-              <a
-                key={item.name}
-                href={item.link}
-                className="group flex items-center px-3 py-2 text-sm font-medium rounded-md text-gray-300 hover:bg-gray-700 hover:text-white"
-              >
-                <span className="truncate">{item.name}</span>
-              </a>
-            ))}
+            {services.map((item) => {
+              const current =
+                pathname === '/iframe/[target]' && query?.target === item.id;
+              return (
+                <a
+                  key={item.name}
+                  href={`/iframe/${item.id}`}
+                  className={classNames(
+                    current
+                      ? 'bg-gray-900 text-white'
+                      : 'text-gray-300 hover:bg-gray-700 hover:text-white',
+                    'group flex items-center px-3 py-2 text-sm font-medium rounded-md',
+                  )}
+                >
+                  <span className="truncate">{item.name}</span>
+                </a>
+              );
+            })}
           </div>
         </div>
       </nav>

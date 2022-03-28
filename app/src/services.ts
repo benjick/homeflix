@@ -6,26 +6,31 @@ import tautulli from '../public/images/tautulli-gs.png';
 
 export const services = [
   {
+    id: 'sonarr',
     name: 'Sonarr',
     link: '/sonarr/',
     image: sonarr,
   },
   {
+    id: 'radarr',
     name: 'Radarr',
     link: '/radarr/',
     image: radarr,
   },
   {
+    id: 'sabnzbd',
     name: 'SABnzbd',
     link: '/sabnzbd/',
     image: sabnzbd,
   },
   {
+    id: 'nzbhydra2',
     name: 'Nzbhydra2',
     link: '/nzbhydra2/',
     image: nzbhydra2,
   },
   {
+    id: 'tautulli',
     name: 'Tautulli',
     link: '/tautulli/',
     image: tautulli,
