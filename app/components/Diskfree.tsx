@@ -15,12 +15,12 @@ export const Diskfree: React.FC<{ paths: PathWithData[] }> = ({ paths }) => {
         Disk usage
       </h3>
       {paths.map((path) => {
-        const percentage = path.free / path.size;
-        const percentageString = `${Math.round(percentage * 100)}%`;
+        const percentageUsed = (path.size - path.free) / path.size;
+        const percentageString = `${Math.round(percentageUsed * 100)}%`;
         const background =
-          percentage > 0.8
+          percentageUsed > 0.8
             ? 'bg-red-600'
-            : percentage < 0.5
+            : percentageUsed < 0.5
             ? 'bg-green-600'
             : 'bg-blue-600';
         return (
@@ -30,7 +30,7 @@ export const Diskfree: React.FC<{ paths: PathWithData[] }> = ({ paths }) => {
                 {path.label}
               </span>
               <span className="text-sm font-medium text-gray-600">
-                {humanFileSize(path.free)} / {humanFileSize(path.size)}
+                {humanFileSize(path.size - path.free)} / {humanFileSize(path.size)}
               </span>
             </div>
             <div className="w-full bg-gray-200 rounded-full h-2.5">
