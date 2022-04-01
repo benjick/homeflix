@@ -22,11 +22,9 @@ const devPaths: Path[] = [
 ];
 
 const paths: Path[] = [
-  // { label: 'C:\\', path: '/mnt/c' },
-  // { label: 'D:\\', path: '/mnt/d' },
-  { label: 'E:\\', path: '/mnt/e' },
-  { label: 'F:\\', path: '/mnt/f' },
-  { label: 'G:\\', path: '/mnt/g' },
+  { label: 'E:\\', path: '/warez/e' },
+  { label: 'F:\\', path: '/warez/f' },
+  { label: 'G:\\', path: '/warez/g' },
 ];
 
 export function getPaths(): Path[] {

@@ -139,6 +139,9 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - ./docker-compose.yml:/docker-compose.yml
+      - /mnt/e/Warez:/warez/e:ro
+      - /mnt/f/Warez:/warez/f:ro
+      - /mnt/g/Warez:/warez/g:ro
     env_file:
       - docker-compose.env
     expose:
