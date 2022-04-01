@@ -2,12 +2,18 @@ import type { GetServerSideProps, NextPage } from 'next';
 import Head from 'next/head';
 import Image from 'next/image';
 import Link from 'next/link';
+import { Diskfree } from '../components/Diskfree';
 import { DownloadHistory } from '../components/DownloadHistory';
 import { DownloadStats } from '../components/DownloadStats';
+import { PathWithData } from '../config';
+import { getPathsWithData } from '../src/diskfree';
 import { History } from '../src/models/History';
 import { services } from '../src/services';
 
-const Home: NextPage<{ history: History }> = ({ history }) => {
+const Home: NextPage<{ history: History; paths: PathWithData[] }> = ({
+  history,
+  paths,
+}) => {
   return (
     <div>
       <Head>
@@ -22,6 +28,7 @@ const Home: NextPage<{ history: History }> = ({ history }) => {
           total_size={history.total_size}
           month_size={history.month_size}
         />
+        <Diskfree paths={paths} />
         <DownloadHistory history={history} />
         <div className="grid grid-cols-1 md:grid-cols-3">
           {services.map(({ name, image, link }) => (
@@ -38,10 +45,15 @@ const Home: NextPage<{ history: History }> = ({ history }) => {
 };
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const res = await fetch('http://localhost:3000/api/sabnzbd');
-  const props = await res.json();
+  const [props, paths] = await Promise.all([
+    fetch('http://localhost:3000/api/sabnzbd').then((res) => res.json()),
+    getPathsWithData(),
+  ]);
   return {
-    props,
+    props: {
+      ...props,
+      paths,
+    },
   };
 };
 
