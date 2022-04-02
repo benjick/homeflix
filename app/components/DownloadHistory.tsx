@@ -1,9 +1,8 @@
-/* This example requires Tailwind CSS v2.0+ */
 import {
   CheckIcon,
-  ThumbUpIcon,
-  UserIcon,
   XIcon,
+  ClockIcon,
+  FolderOpenIcon,
 } from '@heroicons/react/solid';
 import TimeAgo from 'timeago-react';
 import { History } from '../src/models/History';
@@ -26,6 +25,20 @@ export const DownloadHistory: React.FC<{ history: History }> = ({
       return (
         <span className="bg-red-700 h-8 w-8 rounded-full flex items-center justify-center ring-8 ring-gray-100">
           <XIcon className="h-5 w-5 text-white" aria-hidden="true" />
+        </span>
+      );
+    }
+    if (status === 'Queued') {
+      return (
+        <span className="bg-blue-700 h-8 w-8 rounded-full flex items-center justify-center ring-8 ring-gray-100">
+          <ClockIcon className="h-5 w-5 text-white" aria-hidden="true" />
+        </span>
+      );
+    }
+    if (status === 'Extracting') {
+      return (
+        <span className="animate-bounce bg-blue-700 h-8 w-8 rounded-full flex items-center justify-center ring-8 ring-gray-100">
+          <FolderOpenIcon className="h-5 w-5 text-white" aria-hidden="true" />
         </span>
       );
     }

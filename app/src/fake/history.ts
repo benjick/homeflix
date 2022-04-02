@@ -124,7 +124,7 @@ export const fakeHistory = {
         script: 'None',
         report: '',
         url: null,
-        status: 'Completed',
+        status: 'Queued',
         nzo_id: 'SABnzbd_nzo_2h1d7gn2',
         storage:
           '/downloads/complete/Raised.by.Wolves.2020.S02E08.Happiness.1080p.HMAX.WEB-DL.DD5.1.x264-NTb/387bd61598c444a18ad442c6d6edc0dc.mkv',
@@ -185,7 +185,7 @@ export const fakeHistory = {
         script: 'None',
         report: '',
         url: null,
-        status: 'Completed',
+        status: 'Extracting',
         nzo_id: 'SABnzbd_nzo_veqpqozr',
         storage:
           '/downloads/complete/Raised.by.Wolves.2020.S02E07.Feeding.1080p.HMAX.WEB-DL.DD5.1.x264-NTb/447c20a774394017b671a9427150b9d2.mkv',
