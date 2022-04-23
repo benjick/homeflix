@@ -175,6 +175,17 @@ services:
     network_mode: service:wireguard
     command: sh -c 'sleep 1; wget -q -O - https://ifconfig.me/ip; echo'
 
+  plexautolanguages:
+    image: remirigal/plex-auto-languages:latest
+    container_name: plexautolanguages
+    env_file:
+      # Needs PLEX_TOKEN
+      - docker-compose.env
+    environment:
+      - TZ=Europe/Paris
+      - PLEX_URL=http://plex:32400
+    restart: unless-stopped
+
 volumes:
   caddy_data:
     external: true
