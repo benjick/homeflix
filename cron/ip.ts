@@ -54,11 +54,9 @@ export async function updateDnsIp() {
       `https://api.cloudflare.com/client/v4/zones/${zoneId}/dns_records/${record.id}`,
       {
         ...options,
-        method: 'PUT',
+        method: 'PATCH',
         body: JSON.stringify({
           content: currentIp,
-          type: 'A',
-          name: domain,
         }),
       },
     );
