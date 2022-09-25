@@ -148,6 +148,13 @@ services:
       - 3000
     restart: unless-stopped
 
+  cron:
+    build: cron
+    container_name: cron
+    env_file:
+      - docker-compose.env
+    restart: unless-stopped
+
   wireguard:
     image: linuxserver/wireguard
     container_name: wireguard
